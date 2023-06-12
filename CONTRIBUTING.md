@@ -19,7 +19,7 @@
 
 * Suggest your change in the [issues] and start writing code.
 
-People like you make mngr-bot possible. Once again, if you'd like to contribute, feel free - but **please first read the [Code of Conduct](CODE_OF_CONDUCT.md)**
+People like you make py-study-planner possible. Once again, if you'd like to contribute, feel free - but **please first read the [Code of Conduct](CODE_OF_CONDUCT.md)**
 
 Thanks! 🧠 💭 ❤️
 
