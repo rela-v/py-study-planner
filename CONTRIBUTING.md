@@ -1,4 +1,4 @@
-[issues]: https://github.com/rela-v/[INSERT REPOSITORY]/issues
+[issues]: https://github.com/rela-v/py-study-planner/issues
 # How to contribute to mngr-bot (Adapted from the [Ruby on Rails CONTRIBUTING.md file](https://github.com/rails/rails/blob/main/CONTRIBUTING.md))
 
 ## **please first read the [Code of Conduct](CODE_OF_CONDUCT.md) before proceeding.**
