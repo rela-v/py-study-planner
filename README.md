@@ -1,14 +1,14 @@
-(go to CONTRIBUTING.md and this file and search for the keywords "REPLACE"&"INSERT" to complete the setup.)
+![py-study-planner](thumbnail.png)
 
-![mngr-bot](thumbnail.svg) [REPLACE WITH LOGO]
+# py-study-planner: "📝 hard-mode studying for exams: in 🐍 Python!"
 
-# [INSERT REPOSTIORY NAME]: [INSERT REPOSITORY DESCRIPTION]
+## What is py-study-planner?
 
-## What is [INSERT REPOSTIORY NAME]?
+This repo, py-study-planner, is an open source project under the MIT license that has a vision of providing students with a solution to the question: "How do I even study for this?"
 
-## More about [INSERT REPOSTIORY NAME] and how it was developed 🧪
+## More about py-study-planner and how it was developed
 
-![principles of the model](principle.png) [REPLACE WITH IMAGE]
+The project py-study-planner began as a small project of 1 developer (myself) which resulted in plenty of barriers encountered, frustrations built, and back-to-the-drawing-board's, but always with a renewed sense of urgency and necessity. Having been in academia for a great portion of my life I recognize the need for something which can not only encourage students to study but can tell them how to study as well.
 
 ## How to contribute 🤝
 
