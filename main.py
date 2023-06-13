@@ -97,8 +97,7 @@ def list_exam():
         for key, v in loaded.items():
             for k, value in v.items():
                 print(f"{k}: {value}")
-    print("Exam data printed! What next?")
-    print_user_options()
+
 def edit_exam(exam_name):
     """routine for editing user input on exam data to json"""
     with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
@@ -124,6 +123,20 @@ def edit_exam(exam_name):
         return True
     return False
 
+def del_exam():
+    """routine for editing user input on exam data to json"""
+    list_exam()
+    exam_name = input("Listed exams! Type the name of the one you'd like to delete.\n")
+    with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
+        loaded = json.load(exam_data_file)
+    exam_id = database_id_search(loaded, exam_name)
+    print(f"Removing the {exam_name} (id: {exam_id}) from the database...")
+    del loaded[exam_id]
+    with open('exam_data.json',"w", encoding='utf-8') as exam_data_file:
+            json.dump(loaded, exam_data_file)
+    print("Done! What next?")
+    print_user_options()
+    
 def main():
     """run main function while constant "run" is True, allows user to navigate main menu or quit"""
     print("Welcome to the py-study-planner program.")
@@ -143,6 +156,8 @@ def main():
             print_user_options()
         elif usr_input_mm=="l":   # list all exams in json database
             list_exam()
+            print("Exam data printed! What next?")
+            print_user_options()
         elif usr_input_mm=="e":   # edit exam in json json database
             exam_to_edit = input("What exam would you like to edit?\n")
             exam_found = edit_exam(exam_to_edit)
@@ -156,7 +171,7 @@ def main():
                     "What would you like to do next?")
                 print_user_options()
         elif usr_input_mm=="d":   # delete exam in json database
-            print(usr_input_mm)
+            del_exam()
         elif usr_input_mm=="q":   # quit py-study-planner program
             run=False
         else:                       # exception handling: repeat user options
