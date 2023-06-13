@@ -1,3 +1,4 @@
 env/
 .vscode
 exam_data.json
+__pycache__

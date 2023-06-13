@@ -27,7 +27,7 @@ def print_user_options():
     print("('l' and hit enter to list exams that you are currently studying for)")
     print("('e' and hit enter to edit an exam that you are currently studying for)")
     print("('d' and hit enter to delete an exam that you are currently studying for)")
-    print("('q' and hit enter to quit py-study-planner)")
+    print("('q' and hit enter to quit the exam editing suite)")
 
 def get_resource_data():
     """get data for resources according to user input"""
