@@ -1,4 +1,4 @@
-"""main codebase for the py-study-planner project"""
+"""module for editing exams in the py-study-planner project"""
 
 #import libraries
 import json
@@ -94,7 +94,7 @@ def list_exam():
     """routine for listing all added exams"""
     with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
         loaded = json.load(exam_data_file)
-        for key, v in loaded.items():
+        for v in loaded.values():
             for k, value in v.items():
                 print(f"{k}: {value}")
 
@@ -133,7 +133,7 @@ def del_exam():
     print(f"Removing the {exam_name} (id: {exam_id}) from the database...")
     del loaded[exam_id]
     with open('exam_data.json',"w", encoding='utf-8') as exam_data_file:
-            json.dump(loaded, exam_data_file)
+        json.dump(loaded, exam_data_file)
     print("Done! What next?")
     print_user_options()
     
