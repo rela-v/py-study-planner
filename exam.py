@@ -137,9 +137,9 @@ def del_exam():
     print("Done! What next?")
     print_user_options()
     
-def main():
+def exam_main():
     """run main function while constant "run" is True, allows user to navigate main menu or quit"""
-    print("Welcome to the py-study-planner program.")
+    print("Welcome to the exam-editing suite.")
     print("What would you like to do? Here are your options:")
     print_user_options()
     run=True
@@ -180,4 +180,4 @@ def main():
     return run
 
 if __name__=="__main__":
-    main()
+    exam_main()
