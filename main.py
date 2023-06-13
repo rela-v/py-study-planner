@@ -90,6 +90,15 @@ def add_exam():
 
     return exam_data
 
+def list_exam():
+    """routine for listing all added exams"""
+    with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
+        loaded = json.load(exam_data_file)
+        for key, v in loaded.items():
+            for k, value in v.items():
+                print(f"{k}: {value}")
+    print("Exam data printed! What next?")
+    print_user_options()
 def edit_exam(exam_name):
     """routine for editing user input on exam data to json"""
     with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
@@ -133,7 +142,7 @@ def main():
                    "What would you like to do next?")
             print_user_options()
         elif usr_input_mm=="l":   # list all exams in json database
-            print(usr_input_mm)
+            list_exam()
         elif usr_input_mm=="e":   # edit exam in json json database
             exam_to_edit = input("What exam would you like to edit?\n")
             exam_found = edit_exam(exam_to_edit)
