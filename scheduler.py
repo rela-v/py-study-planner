@@ -27,7 +27,7 @@ def gen_tasks(exam_name):
     date_data = datetime.datetime.strptime(date_data, '%m/%d/%Y').date()
     t_remaining = (date_data-today).days
     resource_names = [tup[0] for tup in resource_data]
-    resource_times = [int(tup[1])/t_remaining for tup in resource_data]
+    resource_times = [int(tup[1]) / t_remaining for tup in resource_data]
     tasks = list(zip(resource_names,resource_times))
     return tasks, t_remaining
 
@@ -44,11 +44,26 @@ def view_schedule():
     for i in range(((24*tasks[1])-int(td.hour))-1):
         raw_time = td-tdmin+datetime.timedelta(hours=i+1)
         schedule[convert_to_timeform(raw_time)] = [np.nan]
-    def find_time():
+    def find_time(n):
         """find first instance of window of empty values in dict"""
-        ...
+        j = 0
+        index = 0
+        for i in schedule.keys():
+            
+            print(schedule[i])
+            if (np.isnan(schedule[i])):
+                j += 1
+            else:
+                j = 0
+            if (j >= n):
+                for k in range(index-n, index+1):
+                    key = list(schedule.keys())[k]
+                    schedule[key] = 1
+                break
+            index += 1
+
     schedule = pd.DataFrame(schedule).T
-    print(schedule)
+
     return True
 
 def view_agenda():
