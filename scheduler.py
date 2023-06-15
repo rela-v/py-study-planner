@@ -27,7 +27,7 @@ def gen_tasks(exam_name):
     date_data = datetime.datetime.strptime(date_data, '%m/%d/%Y').date()
     t_remaining = (date_data-today).days
     resource_names = [tup[0] for tup in resource_data]
-    resource_times = [int(tup[1]) / t_remaining for tup in resource_data]
+    resource_times = [int(tup[1])/t_remaining for tup in resource_data]
     tasks = list(zip(resource_names,resource_times))
     return tasks, t_remaining
 
@@ -63,7 +63,7 @@ def view_schedule():
             index += 1
 
     schedule = pd.DataFrame(schedule).T
-
+    print(schedule)
     return True
 
 def view_agenda():
