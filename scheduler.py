@@ -44,9 +44,20 @@ def view_schedule():
     for i in range(((24*tasks[1])-int(td.hour))-1):
         raw_time = td-tdmin+datetime.timedelta(hours=i+1)
         schedule[convert_to_timeform(raw_time)] = [np.nan]
-    def find_time():
+    def find_time(n):
         """find first instance of window of empty values in dict"""
-        ...
+        free_in_a_row = 0
+        for index, date in enumerate(schedule):
+            
+            if (np.isnan(schedule[date])):
+                free_in_a_row += 1
+            else:
+                free_in_a_row = 0
+            if (free_in_a_row >= n):
+                return index-n
+            index += 1
+        return np.nan
+        
     schedule = pd.DataFrame(schedule).T
     print(schedule)
     return True
