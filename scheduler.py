@@ -46,22 +46,18 @@ def view_schedule():
         schedule[convert_to_timeform(raw_time)] = [np.nan]
     def find_time(n):
         """find first instance of window of empty values in dict"""
-        j = 0
-        index = 0
-        for i in schedule.keys():
+        free_in_a_row = 0
+        for index, date in enumerate(schedule):
             
-            print(schedule[i])
-            if (np.isnan(schedule[i])):
-                j += 1
+            if (np.isnan(schedule[date])):
+                free_in_a_row += 1
             else:
-                j = 0
-            if (j >= n):
-                for k in range(index-n, index+1):
-                    key = list(schedule.keys())[k]
-                    schedule[key] = 1
-                break
+                free_in_a_row = 0
+            if (free_in_a_row >= n):
+                return index-n
             index += 1
-
+        return np.nan
+        
     schedule = pd.DataFrame(schedule).T
     print(schedule)
     return True
