@@ -52,7 +52,7 @@ def add_exam():
     exam_date = input("What date is your exam? (use mm/dd/yyyy format)\n")
     resource_data = get_resource_data()
     exam_info = {'exam_name': exam_name, 'exam_date': exam_date, 'resource_data': resource_data}
-    if os.path.exists('exam_data.json'): #if the json database exists then update
+    if (os.path.getsize('exam_data.json') > 0): #if the json database is not empty
     # search ids in order to produce a new, unique id
         with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
             loaded = json.load(exam_data_file)
@@ -82,7 +82,7 @@ def add_exam():
                 break
             else:
                 print("There was a problem.")
-    else: #if the json database doesn't exist then create it
+    else: #if the json database is empty then just fill it
         with open('exam_data.json',"w", encoding='utf-8') as exam_data_file:
             exam_id = random_number_gen(9)
             exam_data = {f'{exam_id}':exam_info}
@@ -93,7 +93,7 @@ def add_exam():
 def list_exam():
     """routine for listing all added exams"""
     with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
-        loaded = json.load(exam_data_file)
+        loaded = json.load(exam_data_file)        
         for v in loaded.values():
             for k, value in v.items():
                 print(f"{k}: {value}")
@@ -153,6 +153,9 @@ def exam_main():
             print(f"{names[-1]} was added to the database "\
                   "(you can find the database under 'exam_data.json')! "\
                    "What would you like to do next?")
+            print_user_options()
+        elif not (os.path.getsize('exam_data.json') > 0):
+            print("Database is empty")
             print_user_options()
         elif usr_input_mm=="l":   # list all exams in json database
             list_exam()
