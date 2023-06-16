@@ -3,7 +3,8 @@
 #import modules
 from scheduler import scheduler_main
 from exam import exam_main
-
+from exam import random_number_gen
+import os
 def print_user_options():
     """presents options for user in menu"""
     print("('e' and hit enter to enter the exam editing menu)")
@@ -16,6 +17,10 @@ def mm_main():
     print("What would you like to do? Here are your options:")
     print_user_options()
     run=True
+    
+    if not os.path.exists('exam_data.json'): #If JSON database doesn't exist then add the database
+        open('exam_data.json',"w", encoding='utf-8')
+
     while run is True:
         usr_input_mm = input("")
         if usr_input_mm=="e":     # generate schedule for exam
