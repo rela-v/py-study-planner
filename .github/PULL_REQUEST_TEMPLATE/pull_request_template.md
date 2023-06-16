@@ -18,4 +18,4 @@ Please add a concise description of changes that this PR makes here:
 3. (Etc.)
 
 **Additional notes**
-Add any other relevant notes for code reviewers here.
+Add any other relevant notes for code reviewers below:
