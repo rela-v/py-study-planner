@@ -1,5 +1,5 @@
 """testing exam.py file functions"""
-
+import json
 from src.exam import random_number_gen
 from src.exam import database_id_search
 from src.exam import print_user_options
@@ -51,3 +51,19 @@ def test_list_exam(capfd):
     assert test_output == "exam_name: math\n"\
         "exam_date: 10/10/2023\n"\
         "resource_data: [['textbook', '300']]\n"
+
+def test_add_exam():
+    file_name = 'add_exam_test.json' 
+    user_input = {'exam_name': 'math', 'exam_date': '10/10/2023', 'resource_data': [('textbook', '300')]}
+    add_exam(user_input, file_name)
+    with open(file_name,"r", encoding='utf-8') as exam_data_file:
+        loaded = json.load(exam_data_file)
+    attribute = list(loaded.keys())[0]
+    print(loaded[attribute])
+    firstItem = loaded[attribute]
+    print(firstItem)
+    assert firstItem["exam_name"] == "math"
+    assert firstItem["exam_date"] == "10/10/2023"
+    assert firstItem["resource_data"] == [["textbook", "300"]]
+    with open(file_name,"w", encoding='utf-8') as exam_data_file:
+        json.dump({}, exam_data_file)

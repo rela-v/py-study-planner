@@ -46,47 +46,51 @@ def get_resource_data():
     resource_data = list(zip(resources, resources_times))
     return resource_data
 
-def add_exam():
-    """routine for adding user input on exam data to json"""
+def add_exam_input():
+    """Subroutine for collecting user input for add_exam()"""
     exam_name = input("What is the name of the exam you'd like to add?\n")
     exam_date = input("What date is your exam? (use mm/dd/yyyy format)\n")
     resource_data = get_resource_data()
     exam_info = {'exam_name': exam_name, 'exam_date': exam_date, 'resource_data': resource_data}
-    if (os.path.getsize('exam_data.json') > 0): #if the json database is not empty
+    print(exam_info)
+    return exam_info
+
+
+def add_exam(user_input, file_name):
+    """routine for adding user input on exam data to json"""
+
+    exam_info = user_input
+
     # search ids in order to produce a new, unique id
-        with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
-            loaded = json.load(exam_data_file)
-        while True:
-            unique = True
-            exam_id = random_number_gen(9)
-            current_ids = []
-            for key,value in loaded.items():
-                if key=="exam_id":
-                    current_ids.append(value)
-                else:
-                    pass
-            for current_id in current_ids:
-                if int(current_id)==int(exam_id):
-                    unique=False
-                else:
-                    pass
-            if unique is False:
-                exam_id = random_number_gen(9)
-            elif unique:
-                exam_data = {f'{exam_id}':exam_info}
-                print(exam_data)
-                loaded.update(exam_data)
-                print(loaded)
-                with open('exam_data.json',"w", encoding='utf-8') as exam_data_file:
-                    json.dump(loaded, exam_data_file)
-                break
+    with open(file_name,"r", encoding='utf-8') as exam_data_file:
+        loaded = json.load(exam_data_file)
+    while True:
+        unique = True
+        exam_id = random_number_gen(9)
+        current_ids = []
+        for key,value in loaded.items():
+            if key=="exam_id":
+                current_ids.append(value)
             else:
-                print("There was a problem.")
-    else: #if the json database is empty then just fill it
-        with open('exam_data.json',"w", encoding='utf-8') as exam_data_file:
+                pass
+        for current_id in current_ids:
+            if int(current_id)==int(exam_id):
+                unique=False
+            else:
+                pass
+        if unique is False:
             exam_id = random_number_gen(9)
+        elif unique:
             exam_data = {f'{exam_id}':exam_info}
-            json.dump(exam_data, exam_data_file)
+            print(exam_data)
+            loaded.update(exam_data)
+            print(loaded)
+            with open(file_name,"w", encoding='utf-8') as exam_data_file:
+                json.dump(loaded, exam_data_file)
+            break
+        else:
+            print("There was a problem.")
+
 
     return exam_data
 
@@ -136,7 +140,8 @@ def del_exam():
         json.dump(loaded, exam_data_file)
     print("Done! What next?")
     print_user_options()
-    
+
+ 
 def exam_main():
     """run main function while constant "run" is True, allows user to navigate main menu or quit"""
     print("Welcome to the exam-editing suite.")
@@ -146,16 +151,14 @@ def exam_main():
     while run is True:
         usr_input_mm = input("")
         if usr_input_mm=="a":     # add exam into json database
-            exam_data = add_exam()
+            exam_input = add_exam_input()
+            exam_data = add_exam(exam_input, 'exam_data.json')
             names = []
             for d in exam_data.values():
                 names.append(d['exam_name'])
             print(f"{names[-1]} was added to the database "\
                   "(you can find the database under 'exam_data.json')! "\
                    "What would you like to do next?")
-            print_user_options()
-        elif not (os.path.getsize('exam_data.json') > 0):
-            print("Database is empty")
             print_user_options()
         elif usr_input_mm=="l":   # list all exams in json database
             list_exam()
