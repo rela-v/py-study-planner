@@ -62,7 +62,7 @@ def add_exam(user_input, file_name):
     exam_info = user_input
 
     # search ids in order to produce a new, unique id
-    with open(file_name,"r", encoding='utf-8') as exam_data_file:
+    with open(file_name,"r", encoding='utf-8') as exam_data_file:   
         loaded = json.load(exam_data_file)
     while True:
         unique = True
@@ -94,49 +94,43 @@ def add_exam(user_input, file_name):
 
     return exam_data
 
-def list_exam():
+def list_exam(file_name):
     """routine for listing all added exams"""
-    with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
+    with open(file_name,"r", encoding='utf-8') as exam_data_file:
         loaded = json.load(exam_data_file)        
         for v in loaded.values():
             for k, value in v.items():
                 print(f"{k}: {value}")
 
-def edit_exam(exam_name):
+def edit_exam(exam_name, file_name, command, new_data):
     """routine for editing user input on exam data to json"""
-    with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
+    with open(file_name,"r", encoding='utf-8') as exam_data_file:
         loaded = json.load(exam_data_file)
     exam_id = database_id_search(loaded, exam_name)
     if exam_id:
-        change_flags = input(f"Type the things you wanted to change about your {exam_name} " \
-                            "exam separated by a space: type...\n"\
-                            "('n' to edit the name of the exam)\n"\
-                            "('d' to edit the date of the exam)\n"\
-                            "('r' to edit the resources of the exam)\n")
+        change_flags = command
         change_flags = change_flags.split(' ')
         if "n" in change_flags:
-            loaded[exam_id]['exam_name'] = input(f"Please input the new name for your {exam_name} "\
-                                                "exam\n")
+            loaded[exam_id]['exam_name'] = new_data
+                
         if "d" in change_flags:
-            loaded[exam_id]['exam_date'] = input(f"Please input the new date for your {exam_name} "\
-                                                "exam in 'mm/dd/yyyy' format\n")
+            loaded[exam_id]['exam_date'] = new_data
         if "r" in change_flags:
-            loaded[exam_id]['resource_data'] = get_resource_data()
-        with open('exam_data.json',"w", encoding='utf-8') as exam_data_file:
+            loaded[exam_id]['resource_data'] = new_data
+        with open(file_name,"w", encoding='utf-8') as exam_data_file:
             json.dump(loaded, exam_data_file)
         return True
     return False
 
-def del_exam():
+def del_exam(file_name, exam_name):
     """routine for editing user input on exam data to json"""
-    list_exam()
-    exam_name = input("Listed exams! Type the name of the one you'd like to delete.\n")
-    with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
+    
+    with open(file_name,"r", encoding='utf-8') as exam_data_file:
         loaded = json.load(exam_data_file)
     exam_id = database_id_search(loaded, exam_name)
     print(f"Removing the {exam_name} (id: {exam_id}) from the database...")
     del loaded[exam_id]
-    with open('exam_data.json',"w", encoding='utf-8') as exam_data_file:
+    with open(file_name,"w", encoding='utf-8') as exam_data_file:
         json.dump(loaded, exam_data_file)
     print("Done! What next?")
     print_user_options()
@@ -148,11 +142,12 @@ def exam_main():
     print("What would you like to do? Here are your options:")
     print_user_options()
     run=True
+    main_file = 'exam_data.json'
     while run is True:
         usr_input_mm = input("")
         if usr_input_mm=="a":     # add exam into json database
             exam_input = add_exam_input()
-            exam_data = add_exam(exam_input, 'exam_data.json')
+            exam_data = add_exam(exam_input, main_file)
             names = []
             for d in exam_data.values():
                 names.append(d['exam_name'])
@@ -161,12 +156,31 @@ def exam_main():
                    "What would you like to do next?")
             print_user_options()
         elif usr_input_mm=="l":   # list all exams in json database
-            list_exam()
+            list_exam(main_file)
             print("Exam data printed! What next?")
             print_user_options()
         elif usr_input_mm=="e":   # edit exam in json json database
             exam_to_edit = input("What exam would you like to edit?\n")
-            exam_found = edit_exam(exam_to_edit)
+            change_flags = input(f"Type the things you wanted to change about your {exam_to_edit} " \
+                            "exam separated by a space: type...\n"\
+                            "('n' to edit the name of the exam)\n"\
+                            "('d' to edit the date of the exam)\n"\
+                            "('r' to edit the resources of the exam)\n")
+            exam_found = False
+            if "n" in change_flags:
+                new_data = input(f"Please input the new name for your {exam_to_edit} "\
+                                                "exam\n")
+                exam_found = edit_exam(exam_to_edit, main_file, change_flags, new_data)
+                
+            if "d" in change_flags:
+                new_data = input(f"Please input the new date for your {exam_to_edit} "\
+                                                "exam in 'mm/dd/yyyy' format\n")
+                exam_found = edit_exam(exam_to_edit, main_file, change_flags, new_data)
+            if "r" in change_flags:
+                new_data = get_resource_data()
+                exam_found = edit_exam(exam_to_edit, main_file, change_flags, new_data)
+
+            
             if exam_found:
                 print(f"{exam_to_edit} was changed in the database! "\
                     "(you can find the database under 'exam_data.json')! "\
@@ -177,7 +191,10 @@ def exam_main():
                     "What would you like to do next?")
                 print_user_options()
         elif usr_input_mm=="d":   # delete exam in json database
-            del_exam()
+            list_exam(main_file)
+            exam_name = input("Listed exams! Type the name of the one you'd like to delete.\n")
+
+            del_exam(main_file, exam_name)
         elif usr_input_mm=="q":   # quit py-study-planner program
             run=False
         else:                       # exception handling: repeat user options
