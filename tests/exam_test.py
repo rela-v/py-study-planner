@@ -17,7 +17,9 @@ def test_random_number_gen():
     assert isinstance(rand_num, int)
 
 def test_database_id_search(capfd):
-    """testing the database_id_search function"""
+    """testing the database_id_exam_name: math
+exam_date: 10/10/2023
+resource_data: [['textbook', '300']]search function"""
     database = {'0130487135087': \
           {'exam_name': 'your_exam', \
            'exam_date': '01-01-2000', \
@@ -42,3 +44,10 @@ def test_print_user_options(capfd):
 
 def test_get_resource_data():
     ...
+
+def test_list_exam(capfd):
+    list_exam()
+    test_output, _ = capfd.readouterr()
+    assert test_output == "exam_name: math\n"\
+        "exam_date: 10/10/2023\n"\
+        "resource_data: [['textbook', '300']]\n"
