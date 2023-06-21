@@ -23,8 +23,6 @@ def get_resource_data():
     resources = resources.split(" ")
     resources_times = []
     for i, resource in enumerate(resources):
-        if i > len(resources):
-            break
         resource_time = input(
             "How much time would you like to dedicate "
             f"to the '{resource}' resource? Enter how many total "
@@ -39,18 +37,17 @@ def get_resource_data():
 def add_exam():
     """routine for adding user input on exam data to json"""
     exam_name = input("What is the name of the exam you'd like to add?\n")
+    with open("exam_data.json", "r", encoding="utf-8") as exam_data_file:
+        loaded = json.load(exam_data_file)
+    if (exam_name in loaded.keys()): # If the new name is already in use then do nothing
+        return "Exam name is already in use"
     exam_date = input("What date is your exam? (use mm/dd/yyyy format)\n")
     resource_data = get_resource_data()
 
     exam_info = {
         "exam_date": exam_date,
         "resource_data": resource_data,
-    }
-    # search ids in order to produce a new, unique id
-    with open("exam_data.json", "r", encoding="utf-8") as exam_data_file:
-        loaded = json.load(exam_data_file)
-    if (exam_name in loaded.keys()):
-        return "Exam name is already in use"
+    }  
     exam_data = {f"{exam_name}": exam_info}
     print(exam_data)
     loaded.update(exam_data)
