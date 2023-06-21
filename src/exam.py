@@ -3,27 +3,6 @@
 # import libraries
 import json
 import os
-import random
-
-
-def random_number_gen(n):
-    """generate a random number with a certain number of digits"""
-    range_start = 10 ** (n - 1)
-    range_end = (10**n) - 1
-    return random.randint(range_start, range_end)
-
-
-def database_id_search(dictionary, exam_name):
-    """traverse through database values to get matching exam_name and return associated id"""
-    for key, value in dictionary.items():  # for each key, value pair
-        if isinstance(
-            value, dict
-        ):  # otherwise, try searching for a dictionary in the keys
-            for val in value.values():
-                if val == exam_name:
-                    return key
-    print("key not found")
-    return None
 
 
 def print_user_options():
@@ -62,41 +41,22 @@ def add_exam():
     exam_name = input("What is the name of the exam you'd like to add?\n")
     exam_date = input("What date is your exam? (use mm/dd/yyyy format)\n")
     resource_data = get_resource_data()
+
     exam_info = {
-        "exam_name": exam_name,
         "exam_date": exam_date,
         "resource_data": resource_data,
     }
     # search ids in order to produce a new, unique id
     with open("exam_data.json", "r", encoding="utf-8") as exam_data_file:
         loaded = json.load(exam_data_file)
-    while True:
-        unique = True
-        exam_id = random_number_gen(9)
-        current_ids = []
-        for key, value in loaded.items():
-            if key == "exam_id":
-                current_ids.append(value)
-            else:
-                pass
-        for current_id in current_ids:
-            if int(current_id) == int(exam_id):
-                unique = False
-            else:
-                pass
-        if unique is False:
-            exam_id = random_number_gen(9)
-        elif unique:
-            exam_data = {f"{exam_id}": exam_info}
-            print(exam_data)
-            loaded.update(exam_data)
-            print(loaded)
-            with open("exam_data.json", "w", encoding="utf-8") as exam_data_file:
-                json.dump(loaded, exam_data_file)
-            break
-        else:
-            print("There was a problem.")
-
+    if (exam_name in loaded.keys()):
+        return "Exam name is already in use"
+    exam_data = {f"{exam_name}": exam_info}
+    print(exam_data)
+    loaded.update(exam_data)
+    print(loaded)
+    with open("exam_data.json", "w", encoding="utf-8") as exam_data_file:
+        json.dump(loaded, exam_data_file)
     return exam_data
 
 
@@ -104,7 +64,8 @@ def list_exam():
     """routine for listing all added exams"""
     with open("exam_data.json", "r", encoding="utf-8") as exam_data_file:
         loaded = json.load(exam_data_file)
-        for v in loaded.values():
+        for key, v in loaded.items():
+            print("exam_name: " + key)
             for k, value in v.items():
                 print(f"{k}: {value}")
 
@@ -113,8 +74,7 @@ def edit_exam(exam_name):
     """routine for editing user input on exam data to json"""
     with open("exam_data.json", "r", encoding="utf-8") as exam_data_file:
         loaded = json.load(exam_data_file)
-    exam_id = database_id_search(loaded, exam_name)
-    if exam_id:
+    if exam_name in loaded.keys():
         change_flags = input(
             f"Type the things you wanted to change about your {exam_name} "
             "exam separated by a space: type...\n"
@@ -124,16 +84,19 @@ def edit_exam(exam_name):
         )
         change_flags = change_flags.split(" ")
         if "n" in change_flags:
-            loaded[exam_id]["exam_name"] = input(
+            
+            exam_name_new = input(
                 f"Please input the new name for your {exam_name} " "exam\n"
             )
+            loaded[exam_name_new] = loaded.pop(exam_name)
+            exam_name = exam_name_new
         if "d" in change_flags:
-            loaded[exam_id]["exam_date"] = input(
+            loaded[exam_name]["exam_date"] = input(
                 f"Please input the new date for your {exam_name} "
                 "exam in 'mm/dd/yyyy' format\n"
             )
         if "r" in change_flags:
-            loaded[exam_id]["resource_data"] = get_resource_data()
+            loaded[exam_name]["resource_data"] = get_resource_data()
         with open("exam_data.json", "w", encoding="utf-8") as exam_data_file:
             json.dump(loaded, exam_data_file)
         return True
@@ -146,9 +109,8 @@ def del_exam():
     exam_name = input("Listed exams! Type the name of the one you'd like to delete.\n")
     with open("exam_data.json", "r", encoding="utf-8") as exam_data_file:
         loaded = json.load(exam_data_file)
-    exam_id = database_id_search(loaded, exam_name)
-    print(f"Removing the {exam_name} (id: {exam_id}) from the database...")
-    del loaded[exam_id]
+    print(f"Removing the {exam_name} from the database...")
+    del loaded[exam_name]
     with open("exam_data.json", "w", encoding="utf-8") as exam_data_file:
         json.dump(loaded, exam_data_file)
     print("Done! What next?")
@@ -165,11 +127,9 @@ def exam_main():
         usr_input_mm = input("")
         if usr_input_mm == "a":  # add exam into json database
             exam_data = add_exam()
-            names = []
-            for d in exam_data.values():
-                names.append(d["exam_name"])
+            new_name = list(exam_data.keys())[-1]
             print(
-                f"{names[-1]} was added to the database "
+                f"{new_name} was added to the database "
                 "(you can find the database under 'exam_data.json')! "
                 "What would you like to do next?"
             )
