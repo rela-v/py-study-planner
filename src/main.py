@@ -3,7 +3,6 @@
 #import modules
 from scheduler import scheduler_main
 from exam import exam_main
-from exam import random_number_gen
 import os
 import json
 def print_user_options():

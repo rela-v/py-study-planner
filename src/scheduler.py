@@ -8,7 +8,6 @@ import math
 from operator import itemgetter
 import pandas as pd
 import numpy as np
-from exam import database_id_search
 
 def print_user_options():
     """print user options for the scheduling suite in menu"""
@@ -20,10 +19,9 @@ def gen_tasks(exam_name):
     """generate a list of tuples with task names and associated times"""
     with open('exam_data.json',"r", encoding='utf-8') as exam_data_file:
         loaded = json.load(exam_data_file)
-    exam_id = database_id_search(loaded, exam_name)
-    resource_data = loaded[exam_id]['resource_data']
+    resource_data = loaded[exam_name]['resource_data']
     today = datetime.datetime.today().date()
-    date_data = loaded[exam_id]['exam_date']
+    date_data = loaded[exam_name]['exam_date']
     date_data = datetime.datetime.strptime(date_data, '%m/%d/%Y').date()
     t_remaining = (date_data-today).days
     resource_names = [tup[0] for tup in resource_data]
