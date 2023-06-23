@@ -35,14 +35,9 @@ class ExamManager:
         resource_data = list(zip(resources, resources_times))
         return resource_data
 
-
-    def add_exam(self):
+    def add_exam_input(self):
         """routine for adding user input on exam data to json"""
         exam_name = input("What is the name of the exam you'd like to add?\n")
-        with open(self.db_file, "r", encoding="utf-8") as exam_data_file:
-            loaded = json.load(exam_data_file)
-        if (exam_name in loaded): # If the new name is already in use then do nothing
-            return "Exam name is already in use"
         exam_date = input("What date is your exam? (use mm/dd/yyyy format)\n")
         resource_data = self.get_resource_data()
 
@@ -50,13 +45,26 @@ class ExamManager:
             "exam_date": exam_date,
             "resource_data": resource_data,
         }  
+
         exam_data = {f"{exam_name}": exam_info}
+        
+        return exam_data
+
+
+    def add_exam(self, data):
+        """routine for adding user input on exam data to json"""
+        exam_data = data
+
+        with open(self.db_file, "r", encoding="utf-8") as exam_data_file:
+            loaded = json.load(exam_data_file)
+        if (list(data.keys())[0] in loaded): # If the new name is already in use then do nothing
+            return "Exam name is already in use"
         print(exam_data)
         loaded.update(exam_data)
         print(loaded)
         with open(self.db_file, "w", encoding="utf-8") as exam_data_file:
             json.dump(loaded, exam_data_file)
-        return exam_data
+        return 
 
 
     def list_exam(self):
@@ -125,8 +133,9 @@ class ExamManager:
             self.print_user_options()
             usr_input_mm = input("")
             if usr_input_mm == "a":  # add exam into json database
-                exam_data = self.add_exam()
-                new_name = list(exam_data.keys())[-1]
+                exam_data = self.add_exam_input()
+                added_exam = self.add_exam(exam_data)
+                new_name = list(added_exam.keys())[-1]
                 print(
                     f"{new_name} was added to the database "
                     "(you can find the database under 'exam_data.json')! "

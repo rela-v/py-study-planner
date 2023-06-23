@@ -1,44 +1,43 @@
 """testing exam.py file functions"""
 
-from src.exam import random_number_gen
-from src.exam import database_id_search
-from src.exam import print_user_options
-from src.exam import get_resource_data
-from src.exam import add_exam
-from src.exam import list_exam
-from src.exam import edit_exam
-from src.exam import del_exam
-from src.exam import exam_main
+from src.exam import ExamManager
+import json
 
-def test_random_number_gen():
-    """testing the random_number_gen function"""
-    rand_num = random_number_gen(13)
-    assert len(str(rand_num)) == 13
-    assert isinstance(rand_num, int)
+class TestExam:
 
-def test_database_id_search(capfd):
-    """testing the database_id_search function"""
-    database = {'0130487135087': \
-          {'exam_name': 'your_exam', \
-           'exam_date': '01-01-2000', \
-            'resource_data':[["osmosis", "1000"], ["first-aid", "1000"]]}}
-    db_id = database_id_search(database, 'your_exam')
-    db_na_id = database_id_search(database, 'not_your_exam')
-    assert isinstance(db_id, str)
-    assert db_id == '0130487135087'
-    assert db_na_id is None
-    test_output, _ = capfd.readouterr()
-    assert test_output == "key not found\n" or test_output is None
+    listExamMgr = ExamManager('tests/exam_db/list_test.json')
+    addExamMgr = ExamManager('tests/exam_db/add_test.json')
 
-def test_print_user_options(capfd):
-    """testing the print_user_options function"""
-    print_user_options()
-    test_output, _ = capfd.readouterr()
-    assert test_output == "('a' and hit enter to add an exam that you are studying for)\n"\
-    "('l' and hit enter to list exams that you are currently studying for)\n"\
-    "('e' and hit enter to edit an exam that you are currently studying for)\n"\
-    "('d' and hit enter to delete an exam that you are currently studying for)\n"\
-    "('q' and hit enter to quit the exam editing suite)\n"
 
-def test_get_resource_data():
-    ...
+    def test_print_user_options(self, capfd):
+        """testing the print_user_options function"""
+        self.listExamMgr.print_user_options()
+        test_output, _ = capfd.readouterr()
+        assert test_output == "('a' and hit enter to add an exam that you are studying for)\n"\
+        "('l' and hit enter to list exams that you are currently studying for)\n"\
+        "('e' and hit enter to edit an exam that you are currently studying for)\n"\
+        "('d' and hit enter to delete an exam that you are currently studying for)\n"\
+        "('q' and hit enter to quit the exam editing suite)\n"
+    
+    def test_list_exam(self, capfd):
+        """testing the list_exam() function"""
+        self.listExamMgr.list_exam()
+        test_output, _ = capfd.readouterr()
+        assert test_output == "exam_name: math\n"\
+            "exam_date: 10/10/2023\n"\
+            "resource_data: [['textbook', '200'], ['website', '250']]\n"
+    
+    def test_add_exam(self):
+        """testing the add_exam function"""
+        exam_name = 'math'
+        user_input = {f"{exam_name}": { 'exam_date': '10/10/2023', 'resource_data': [('textbook', '300')]}}
+        self.addExamMgr.add_exam(user_input)
+        with open(self.addExamMgr.db_file,"r", encoding='utf-8') as exam_data_file:
+            loaded = json.load(exam_data_file)
+        print(loaded[exam_name])
+        firstItem = loaded[exam_name]
+        print(firstItem)
+        assert firstItem["exam_date"] == "10/10/2023"
+        assert firstItem["resource_data"] == [["textbook", "300"]]
+        with open(self.addExamMgr.db_file,"w", encoding='utf-8') as exam_data_file:
+            json.dump({}, exam_data_file)
