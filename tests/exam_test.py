@@ -5,8 +5,8 @@ import json
 
 class TestExam:
 
-    listExamMgr = ExamManager('tests/exam_db/list_test.json')
-    addExamMgr = ExamManager('tests/exam_db/add_test.json')
+    listExamMgr = ExamManager('tests/exam_db/one_test.json')
+    addExamMgr = ExamManager('tests/exam_db/empty_test.json')
 
 
     def test_print_user_options(self, capfd):
