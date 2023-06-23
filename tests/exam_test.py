@@ -41,3 +41,14 @@ class TestExam:
         assert firstItem["resource_data"] == [["textbook", "300"]]
         with open(self.addExamMgr.db_file,"w", encoding='utf-8') as exam_data_file:
             json.dump({}, exam_data_file)
+    
+    def test_edit_exam(self):
+        """testing the edit_exam function"""
+        exam ='math'
+        flag = 'n'
+        data = 'physics'
+        self.listExamMgr.edit_exam(exam, flag, data)
+        with open(self.listExamMgr.db_file, 'r', encoding='utf-8') as exam_data_file:
+            loaded = json.load(exam_data_file)
+        assert data in list(loaded)
+        self.listExamMgr.edit_exam(data, flag, exam)

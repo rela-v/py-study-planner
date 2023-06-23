@@ -77,33 +77,19 @@ class ExamManager:
                     print(f"{k}: {value}")
 
 
-    def edit_exam(self, exam_name):
+    def edit_exam(self, exam_name, command, new_data):
         """routine for editing user input on exam data to json"""
         with open(self.db_file, "r", encoding="utf-8") as exam_data_file:
             loaded = json.load(exam_data_file)
         if exam_name in loaded:
-            change_flags = input(
-                f"Type the things you wanted to change about your {exam_name} "
-                "exam separated by a space: type...\n"
-                "('n' to edit the name of the exam)\n"
-                "('d' to edit the date of the exam)\n"
-                "('r' to edit the resources of the exam)\n"
-            )
-            change_flags = change_flags.split(" ")
-            if "n" in change_flags:
-                
-                exam_name_new = input(
-                    f"Please input the new name for your {exam_name} " "exam\n"
-                )
-                loaded[exam_name_new] = loaded.pop(exam_name)
-                exam_name = exam_name_new
+            change_flags = command
+            if "n" in change_flags:        
+                loaded[new_data] = loaded.pop(exam_name)
+                exam_name = new_data
             if "d" in change_flags:
-                loaded[exam_name]["exam_date"] = input(
-                    f"Please input the new date for your {exam_name} "
-                    "exam in 'mm/dd/yyyy' format\n"
-                )
+                loaded[exam_name]["exam_date"] = new_data
             if "r" in change_flags:
-                loaded[exam_name]["resource_data"] = self.get_resource_data()
+                loaded[exam_name]["resource_data"] = new_data
             with open(self.db_file, "w", encoding="utf-8") as exam_data_file:
                 json.dump(loaded, exam_data_file)
             return True
@@ -146,17 +132,35 @@ class ExamManager:
                 print("Exam data printed! What next?")
             elif usr_input_mm == "e":  # edit exam in json json database
                 exam_to_edit = input("What exam would you like to edit?\n")
-                exam_found = self.edit_exam(exam_to_edit)
+                change_flags = input(f"Type the things you wanted to change about your {exam_to_edit}\n" \
+                                "('n' to edit the name of the exam)\n"\
+                                "('d' to edit the date of the exam)\n"\
+                                "('r' to edit the resources of the exam)\n")
+                exam_found = False
+                if "n" in change_flags:
+                    new_data = input(f"Please input the new name for your {exam_to_edit} "\
+                                                    "exam\n")
+                    exam_found = self.edit_exam(exam_to_edit, change_flags, new_data)
+
+                if "d" in change_flags:
+                    new_data = input(f"Please input the new date for your {exam_to_edit} "\
+                                                    "exam in 'mm/dd/yyyy' format\n")
+                    exam_found = self.edit_exam(exam_to_edit, change_flags, new_data)
+                if "r" in change_flags:
+                    new_data = self.get_resource_data()
+                    exam_found = self.edit_exam(exam_to_edit, change_flags, new_data)
+
+
                 if exam_found:
-                    print(
-                        f"{exam_to_edit} was changed in the database! "
-                        "(you can find the database under 'exam_data.json')! "
-                        "What would you like to do next?"
+                    print(f"{exam_to_edit} was changed in the database! "\
+                        "(you can find the database under 'exam_data.json')! "\
                     )
                 else:
                     print(
                         f"{exam_to_edit} was not found. " "What would you like to do next?"
                     )
+
+                
             elif usr_input_mm == "d":  # delete exam in json database
                 self.del_exam()
             elif usr_input_mm == "q":  # quit py-study-planner program
