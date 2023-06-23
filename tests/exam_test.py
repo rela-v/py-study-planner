@@ -52,3 +52,16 @@ class TestExam:
             loaded = json.load(exam_data_file)
         assert data in list(loaded)
         self.listExamMgr.edit_exam(data, flag, exam)
+    
+    def test_del_exam(self):
+        """testing the del_exam() function"""
+        exam = 'math'
+        with open(self.listExamMgr.db_file, 'r', encoding='utf-8') as exam_data_file:
+            old_loaded = json.load(exam_data_file)
+        self.listExamMgr.del_exam(exam)
+        with open(self.listExamMgr.db_file, 'r', encoding='utf-8') as exam_data_file:
+            loaded = json.load(exam_data_file)
+        assert len(loaded) == 0
+        with open(self.listExamMgr.db_file, "w", encoding='utf-8') as exam_data_file:
+            json.dump(old_loaded, exam_data_file)
+

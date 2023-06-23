@@ -96,10 +96,9 @@ class ExamManager:
         return False
 
 
-    def del_exam(self):
+    def del_exam(self, exam_name):
         """routine for editing user input on exam data to json"""
-        self.list_exam()
-        exam_name = input("Listed exams! Type the name of the one you'd like to delete.\n")
+        
         with open(self.db_file, "r", encoding="utf-8") as exam_data_file:
             loaded = json.load(exam_data_file)
         print(f"Removing the {exam_name} from the database...")
@@ -162,7 +161,9 @@ class ExamManager:
 
                 
             elif usr_input_mm == "d":  # delete exam in json database
-                self.del_exam()
+                self.list_exam()
+                exam_name = input("Listed exams! Type the name of the one you'd like to delete.\n")
+                self.del_exam(exam_name)
             elif usr_input_mm == "q":  # quit py-study-planner program
                 run = False
             else:  # exception handling: repeat user options
