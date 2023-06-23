@@ -1,8 +1,8 @@
 """code execution main menu file"""
 
 #import modules
-from scheduler import ScheduleManager
-from exam import ExamManager
+from src.scheduler import ScheduleManager
+from src.exam import ExamManager
 import os
 import json
 
@@ -24,12 +24,9 @@ class MainProgram:
         run=True
         
         if not os.path.exists('exam_data.json'): #If JSON database doesn't exist then add the database
-            open('exam_data.json',"w", encoding='utf-8')
-
-        if (os.path.getsize('exam_data.json') == 0): #If JSON database is empty then add '{}'
             with open('exam_data.json',"w", encoding='utf-8') as exam_data_file:
                 json.dump({}, exam_data_file)
-
+   
         while run is True:
             self.print_user_options()
             usr_input_mm = input("")
