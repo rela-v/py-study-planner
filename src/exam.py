@@ -24,7 +24,7 @@ class ExamManager:
         )
         resources = resources.split(" ")
         resources_times = []
-        for i, resource in enumerate(resources):
+        for resource in resources:
             resource_time = input(
                 "How much time would you like to dedicate "
                 f"to the '{resource}' resource? Enter how many total "
@@ -114,7 +114,7 @@ class ExamManager:
         print("What would you like to do? Here are your options:")
         
         run = True
-        while run is True:
+        while run:
             self.print_user_options()
             usr_input_mm = input("")
             if usr_input_mm == "a":  # add exam into json database
@@ -168,7 +168,6 @@ class ExamManager:
                 run = False
             else:  # exception handling: repeat user options
                 print("input invalid. your options are:")
-        return run
 
 
 if __name__ == "__main__":

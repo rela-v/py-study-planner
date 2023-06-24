@@ -31,8 +31,7 @@ class MainProgram:
         
         self.check_database_file('exam_data.json')
         
-   
-        while run is True:
+        while run:
             self.print_user_options()
             usr_input_mm = input("")
             if usr_input_mm=="e":     # generate schedule for exam
@@ -46,7 +45,6 @@ class MainProgram:
             else:                       # exception handling: repeat user options
                 print("input invalid. your options are:")
                 
-        return run
 
 if __name__=="__main__":
     mainloop = MainProgram()

@@ -14,7 +14,7 @@ class TestMain:
                               "('s' and hit enter to enter the schedule editing menu)\n"\
                               "('q' and hit enter to quit py-study-planner)\n"
     
-    def test_mm_main(self):
+    def test_check_database_file(self):
         file_path = 'tests/main_db/main_test.json'
         if os.path.exists('tests/main_test.json'):
             try:
