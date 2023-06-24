@@ -4,3 +4,4 @@ exam_data.json
 __pycache__
 .coverage
 .pytest_cache
+tests/main_db/main_test.json

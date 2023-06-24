@@ -1,8 +1,8 @@
 """code execution main menu file"""
 
 #import modules
-from src.scheduler import ScheduleManager
-from src.exam import ExamManager
+from scheduler import ScheduleManager
+from exam import ExamManager
 import os
 import json
 
@@ -17,15 +17,20 @@ class MainProgram:
         print("('s' and hit enter to enter the schedule editing menu)")
         print("('q' and hit enter to quit py-study-planner)")
 
+    def check_database_file(self, file_name='exam_data.json'):
+        if not os.path.exists(file_name): #If JSON database doesn't exist then add the database
+            with open(file_name,"w", encoding='utf-8') as exam_data_file:
+                json.dump({}, exam_data_file)
+
+
     def mm_main(self):
         """run main function while constant "run" is True, allows user to navigate main menu or quit"""
         print("Welcome to py-study-planner.")
         print("What would you like to do? Here are your options:")
         run=True
         
-        if not os.path.exists('exam_data.json'): #If JSON database doesn't exist then add the database
-            with open('exam_data.json',"w", encoding='utf-8') as exam_data_file:
-                json.dump({}, exam_data_file)
+        self.check_database_file('exam_data.json')
+        
    
         while run is True:
             self.print_user_options()
