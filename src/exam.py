@@ -120,7 +120,7 @@ class ExamManager:
             if usr_input_mm == "a":  # add exam into json database
                 exam_data = self.add_exam_input()
                 added_exam = self.add_exam(exam_data)
-                new_name = list(exam_data)[0]
+                new_name = list(exam_data)
                 print(
                     f"{new_name} was added to the database "
                     "(you can find the database under 'exam_data.json')! "

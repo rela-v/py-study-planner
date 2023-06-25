@@ -1,5 +1,4 @@
 """testing main.py file functions"""
-
 from src.main import MainProgram
 import json
 import os

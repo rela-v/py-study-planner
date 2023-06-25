@@ -1,8 +1,7 @@
 """code execution main menu file"""
 
 #import modules
-from scheduler import ScheduleManager
-from exam import ExamManager
+
 import os
 import json
 
@@ -47,5 +46,10 @@ class MainProgram:
                 
 
 if __name__=="__main__":
+    from scheduler import ScheduleManager
+    from exam import ExamManager
     mainloop = MainProgram()
     mainloop.mm_main()
+else:
+    from src.scheduler import ScheduleManager
+    from src.exam import ExamManager

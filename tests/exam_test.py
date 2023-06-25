@@ -1,7 +1,7 @@
 """testing exam.py file functions"""
-
 from src.exam import ExamManager
 import json
+
 
 class TestExam:
 
