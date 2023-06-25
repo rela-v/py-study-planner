@@ -64,7 +64,7 @@ class ExamManager:
         print(loaded)
         with open(self.db_file, "w", encoding="utf-8") as exam_data_file:
             json.dump(loaded, exam_data_file)
-        return 
+        return exam_data
 
 
     def list_exam(self):
@@ -120,7 +120,7 @@ class ExamManager:
             if usr_input_mm == "a":  # add exam into json database
                 exam_data = self.add_exam_input()
                 added_exam = self.add_exam(exam_data)
-                new_name = list(added_exam.keys())[-1]
+                new_name = list(exam_data)[0]
                 print(
                     f"{new_name} was added to the database "
                     "(you can find the database under 'exam_data.json')! "
