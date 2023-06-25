@@ -75,7 +75,7 @@ class ScheduleManager:
         print("Welcome to the scheduling suite.")
         print("What would you like to do? Here are your options:")
         run=True
-        while run is True:
+        while run:
             self.print_user_options()
             usr_input_mm = input("")
             if usr_input_mm=="s":     # display schedules for exams
@@ -88,7 +88,6 @@ class ScheduleManager:
                 run=False
             else:                       # exception handling: repeat user options
                 print("input invalid. your options are:")
-        return run
 
 if __name__=="__main__":
     scheduleMgr = ScheduleManager()
